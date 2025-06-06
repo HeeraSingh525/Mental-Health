@@ -1,0 +1,1 @@
+import{t as a,j as t,N as n}from"./index-C8xfDxDl.js";const i=({children:e})=>{const o=a();return localStorage.getItem("authToken")?t.jsx(t.Fragment,{children:e}):t.jsx(n,{to:"/authentication/sign-in",state:{from:o},replace:!0})};export{i as default};

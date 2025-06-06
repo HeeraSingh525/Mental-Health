@@ -1,0 +1,4 @@
+.MuiDataGrid-cell:has(.UserStatus) {
+  display: flex;
+  align-items: center;
+}

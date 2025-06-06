@@ -10,7 +10,7 @@ export default defineConfig({
         checker({
             typescript: true,
             eslint: {
-                lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+                lintCommand: 'eslint "./src/**/*.{ts,jsx}"',
             },
         }),
     ],
@@ -21,5 +21,5 @@ export default defineConfig({
         host: '0.0.0.0',
         port: 3000,
     },
-    base: '/Health',
+    base: '/Mental-Health',
 });

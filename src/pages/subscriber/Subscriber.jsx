@@ -34,7 +34,7 @@ const dummySubscribers = [
 
 const Subscriber = () => {
   return (
-    <Container maxWidth="md" sx={{ py: 5 }}>
+    <Container sx={{ py: 3 }}>
       <Typography variant="h4" gutterBottom>
         Subscribers
       </Typography>

@@ -1,17 +1,17 @@
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
-import { DataGrid, GridColDef, useGridApiRef } from '@mui/x-data-grid';
+import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import { rows } from 'data/product-performance';
 import { currencyFormat } from 'helpers/utils';
 import CustomPagination from 'components/common/CustomPagination';
 import SearchFilter from 'components/common/SearchFilter';
 
-const columns: GridColDef<(typeof rows)[number]>[] = [
+const columns = [
   {
     field: 'assigned',
     headerName: 'Assigned',
     flex: 1.5,
     minWidth: 200,
-    valueGetter: ({ name }: { name: string }) => name,
+    valueGetter: ({ name }) => name,
     renderCell: (params) => {
       return (
         <Stack justifyContent="center" height={1}>
@@ -41,7 +41,7 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     flex: 1,
     minWidth: 150,
     renderCell: (params) => {
-      let color: string = '';
+      let color = '';
       switch (params.value) {
         case 'Low':
           color = 'success.lighter';
@@ -65,7 +65,7 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
     flex: 0.5,
     minWidth: 150,
     valueGetter: (value) => value,
-    valueFormatter: (value: number) => `${currencyFormat(value / 1000)}k`,
+    valueFormatter: (value) => `${currencyFormat(value / 1000)}k`,
   },
 ];
 

@@ -12,6 +12,7 @@ import { useState } from 'react';
 import Profile from '../../../assets/Profile.webp';
 import IconifyIcon from '../../../components/base/IconifyIcon';
 import { Link as RouterLink } from 'react-router-dom';
+import { useNavFunction } from '../NavFunctionContext';
 
 const menuItems = [
   {
@@ -31,6 +32,7 @@ const menuItems = [
 const AccountDropdown = () => {
   const [anchorEl, setAnchorEl] = useState();
   const open = Boolean(anchorEl);
+  const { navItemFunction } = useNavFunction();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,36 +40,55 @@ const AccountDropdown = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
-
-    // const logoutItem = menuItems.find((item) => item.label === 'Logout');
-
-    // if (logoutItem) {
-    //   localStorage.clear();
-    //   console.log('User signed out');
-    // }
   };
 
-  const accountMenuItems = menuItems.map((menuItem) => (
-    <MenuItem
-      key={menuItem.id}
-      onClick={handleClose}
-      component={RouterLink}
-      to={menuItem.pathName}
-      rel="noopener noreferrer"
-      sx={{
-        '&:hover .account-menu-icon': { color: 'common.white' },
-      }}
-    >
-      <ListItemIcon>
-        <IconifyIcon
-          icon={menuItem.icon}
-          sx={{ color: 'primary.main' }}
-          className="account-menu-icon"
-        />
-      </ListItemIcon>
-      <Typography variant="body1">{menuItem.label}</Typography>
-    </MenuItem>
-  ));
+  const accountMenuItems = menuItems.map((menuItem) => {
+    if (menuItem.label === 'Logout') {
+      return (
+        <MenuItem
+          key={menuItem.id}
+          onClick={() => {
+            handleClose();
+            navItemFunction(); // 👈 Your custom logout function from context
+          }}
+          sx={{
+            '&:hover .account-menu-icon': { color: 'common.white' },
+          }}
+        >
+          <ListItemIcon>
+            <IconifyIcon
+              icon={menuItem.icon}
+              sx={{ color: 'primary.main' }}
+              className="account-menu-icon"
+            />
+          </ListItemIcon>
+          <Typography variant="body1">{menuItem.label}</Typography>
+        </MenuItem>
+      );
+    }
+
+    return (
+      <MenuItem
+        key={menuItem.id}
+        onClick={handleClose}
+        component={RouterLink}
+        to={menuItem.pathName}
+        rel="noopener noreferrer"
+        sx={{
+          '&:hover .account-menu-icon': { color: 'common.white' },
+        }}
+      >
+        <ListItemIcon>
+          <IconifyIcon
+            icon={menuItem.icon}
+            sx={{ color: 'primary.main' }}
+            className="account-menu-icon"
+          />
+        </ListItemIcon>
+        <Typography variant="body1">{menuItem.label}</Typography>
+      </MenuItem>
+    );
+  });
 
   return (
     <>
@@ -106,7 +127,9 @@ const AccountDropdown = () => {
         id="account-menu"
         open={open}
         onClose={handleClose}
-        onClick={handleClose}
+        onClick={() => {
+          handleClose();
+        }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >

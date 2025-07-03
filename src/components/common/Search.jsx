@@ -1,11 +1,7 @@
-import { InputAdornment, SxProps, TextField } from '@mui/material';
+import { InputAdornment, TextField } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
 
-interface SearchProps {
-  sx?: SxProps;
-}
-
-const Search = (props: SearchProps) => {
+const Search = (props) => {
   return (
     <TextField
       id="input-with-searchIcon-textfield"

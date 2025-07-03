@@ -33,7 +33,7 @@ const UserDetail = () => {
   if (error) return <Typography color="error.main">{error}</Typography>;
 
   return (
-    <Paper sx={{ p: 4 }}>
+    <Paper sx={{ p: 3, mx: 'auto', mt: 0, width: '100%', maxWidth: 600 }}>
       <Typography variant="h4" gutterBottom>
         User Detail
       </Typography>

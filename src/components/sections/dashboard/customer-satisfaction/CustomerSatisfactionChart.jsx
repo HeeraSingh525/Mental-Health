@@ -1,19 +1,11 @@
 import { alpha, useTheme } from '@mui/material';
 import * as echarts from 'echarts/core';
-import {
-  TooltipComponent,
-  TooltipComponentOption,
-  GridComponent,
-  GridComponentOption,
-  LegendComponent,
-  LegendComponentOption,
-} from 'echarts/components';
-import { LineChart, LineSeriesOption } from 'echarts/charts';
+import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
+import { LineChart } from 'echarts/charts';
 import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
-import { MutableRefObject, useMemo } from 'react';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import ReactEchart from 'components/base/ReactEhart';
+import { useMemo } from 'react';
+import ReactEchart from '../../../../components/base/ReactEhart';
 
 echarts.use([
   TooltipComponent,
@@ -24,27 +16,11 @@ echarts.use([
   UniversalTransition,
 ]);
 
-type EChartsOption = echarts.ComposeOption<
-  TooltipComponentOption | GridComponentOption | LegendComponentOption | LineSeriesOption
->;
-
-interface CustomerSatisfactionChart {
-  chartRef: MutableRefObject<EChartsReactCore | null>;
-  data: {
-    'last month': number[];
-    'this month': number[];
-  };
-  style?: {
-    height?: number;
-    width?: number;
-  };
-}
-
-const CustomerSatisfactionChart = ({ chartRef, data, style }: CustomerSatisfactionChart) => {
+const CustomerSatisfactionChart = ({ chartRef, data, style }) => {
   const theme = useTheme();
 
   const customerSatisfactionChartOption = useMemo(() => {
-    const option: EChartsOption = {
+    const option = {
       color: [theme.palette.info.main, theme.palette.success.dark],
       tooltip: {
         trigger: 'item',

@@ -1,5 +1,5 @@
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 // Dummy data
 const emotionRows = [
@@ -33,7 +33,7 @@ const emotionRows = [
   },
 ];
 
-const columns: GridColDef<(typeof emotionRows)[number]>[] = [
+const columns = [
   {
     field: 'user',
     headerName: 'User',

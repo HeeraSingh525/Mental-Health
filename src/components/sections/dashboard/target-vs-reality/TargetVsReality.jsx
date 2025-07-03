@@ -1,7 +1,7 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import TargetVsRealityChart from './TargetVsRealityChart';
-import IconifyIcon from 'components/base/IconifyIcon';
-import { salesData, targetVsReality } from 'data/target-vs-reality';
+import IconifyIcon from '../../../../components/base/IconifyIcon';
+import { salesData, targetVsReality } from '../../../../data/target-vs-reality';
 
 const TargetVsReality = () => {
   return (

@@ -1,14 +1,13 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useRef, useState } from 'react';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import { customerSatisfaction } from 'data/customer-satisfaction';
-import { currencyFormat, getTotal } from 'helpers/utils';
-import Pin from 'components/icons/Pin';
-import LegendToggleButton from 'components/common/LegendToggleButton';
+import { customerSatisfaction } from '../../../../data/customer-satisfaction';
+import { currencyFormat, getTotal } from '../../../../helpers/utils';
+import Pin from '../../../../components/icons/Pin';
+import LegendToggleButton from '../../../../components/common/LegendToggleButton';
 import CustomerSatisfactionChart from './CustomerSatisfactionChart';
 
 const CustomerSatisfaction = () => {
-  const chartRef = useRef<EChartsReactCore | null>(null);
+  const chartRef = useRef(null);
   const [legend, setLegend] = useState({
     'last month': false,
     'this month': false,
@@ -23,7 +22,7 @@ const CustomerSatisfaction = () => {
     [customerSatisfaction['this month']],
   );
 
-  const handleLegendToggle = (name: keyof typeof legend) => {
+  const handleLegendToggle = (name) => {
     setLegend((prevState) => ({
       ...prevState,
       [name]: !prevState[name],

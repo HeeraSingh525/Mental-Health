@@ -1,15 +1,8 @@
-import { SxProps, TextField } from '@mui/material';
-import { GridApiCommunity } from '@mui/x-data-grid/internals';
-import { ChangeEvent, MutableRefObject } from 'react';
-import IconifyIcon from 'components/base/IconifyIcon';
+import { TextField } from '@mui/material';
+import IconifyIcon from '../../components/base/IconifyIcon';
 
-interface SearchFilterProps {
-  apiRef: MutableRefObject<GridApiCommunity>;
-  sx?: SxProps;
-}
-
-const SearchFilter = ({ apiRef, ...props }: SearchFilterProps) => {
-  const handleFilter = (event: ChangeEvent<HTMLInputElement>) => {
+const SearchFilter = ({ apiRef, ...props }) => {
+  const handleFilter = (event) => {
     const value = event.target.value;
     const searchText = value.toLowerCase();
     apiRef.current.setQuickFilterValues([searchText]);

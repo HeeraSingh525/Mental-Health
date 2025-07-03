@@ -1,6 +1,6 @@
 // src/pages/Settings.jsx
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Container,
   Typography,
@@ -16,7 +16,7 @@ import {
   InputAdornment,
   Box,
 } from '@mui/material';
-// import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, PhotoCamera } from '@mui/icons-material';
 
 const Settings = () => {
   const [emailNotif, setEmailNotif] = useState(true);
@@ -54,13 +54,13 @@ const Settings = () => {
         <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
           <Grid item xs={12} sm={2}>
             <Box position="relative" display="inline-block">
-              <Avatar src={profilePic} alt="Admin Avatar" sx={{ width: 56, height: 56 }} />
+              <Avatar src={profilePic} alt="Heera Singh" sx={{ width: 56, height: 56 }} />
               <IconButton
                 color="primary"
                 component="label"
                 sx={{ position: 'absolute', bottom: -8, right: -8 }}
               >
-                {/* <PhotoCamera fontSize="small" /> */}
+                <PhotoCamera fontSize="small" />
                 <input type="file" accept="image/*" hidden onChange={handleProfilePicChange} />
               </IconButton>
             </Box>
@@ -89,7 +89,7 @@ const Settings = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? 'Off' : 'On'}
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),
@@ -105,7 +105,7 @@ const Settings = () => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                      {showConfirmPassword ? 'Off' : 'On'}
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 ),

@@ -7,19 +7,15 @@ import {
   alpha,
   useTheme,
 } from '@mui/material';
-import { Product } from 'data/top-products';
 
-const TopProduct = ({ product }: { product: Product }) => {
+const TopProduct = ({ product }) => {
   const theme = useTheme();
 
   const { id, name, color, sales } = product;
 
-  const [paletteOption, simplePaletteColorOption] = color.split('.') as [
-    keyof typeof theme.palette,
-    keyof (typeof theme.palette)[keyof typeof theme.palette],
-  ];
+  const [paletteOption, simplePaletteColorOption] = color.split('.');
 
-  const productColor = theme.palette[paletteOption][simplePaletteColorOption];
+  const productColor = theme.palette?.[paletteOption]?.[simplePaletteColorOption];
 
   return (
     <TableRow>

@@ -1,42 +1,18 @@
-import { SxProps, useTheme } from '@mui/material';
-import { MutableRefObject, useMemo } from 'react';
+import { useTheme } from '@mui/material';
+import { useMemo } from 'react';
 import * as echarts from 'echarts/core';
-import {
-  TooltipComponent,
-  TooltipComponentOption,
-  LegendComponent,
-  GridComponent,
-  GridComponentOption,
-} from 'echarts/components';
-import { BarChart, BarSeriesOption } from 'echarts/charts';
+import { TooltipComponent, LegendComponent, GridComponent } from 'echarts/components';
+import { BarChart } from 'echarts/charts';
 import { CanvasRenderer } from 'echarts/renderers';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import ReactEchart from 'components/base/ReactEhart';
+import ReactEchart from '../../../../components/base/ReactEhart';
 
 echarts.use([TooltipComponent, GridComponent, LegendComponent, BarChart, CanvasRenderer]);
 
-type EChartsOption = echarts.ComposeOption<
-  TooltipComponentOption | GridComponentOption | BarSeriesOption
->;
-
-interface VolumeVsServiceChartProps {
-  chartRef: MutableRefObject<EChartsReactCore | null>;
-  data: {
-    volume: number[];
-    services: number[];
-  };
-  style?: {
-    height: number;
-    width?: number;
-  };
-  sx: SxProps;
-}
-
-const VolumeVsServiceChart = ({ chartRef, data, style, ...rest }: VolumeVsServiceChartProps) => {
+const VolumeVsServiceChart = ({ chartRef, data, style, ...rest }) => {
   const theme = useTheme();
 
   const volumeVsServiceChartOption = useMemo(() => {
-    const option: EChartsOption = {
+    const option = {
       color: [theme.palette.success.main, theme.palette.info.main],
       legend: {
         show: false,

@@ -1,8 +1,7 @@
 import { Card, CardContent, Stack, Typography } from '@mui/material';
-import IconifyIcon from 'components/base/IconifyIcon';
-import { SaleItem } from 'data/sales';
+import IconifyIcon from '../../../../components/base/IconifyIcon';
 
-const SaleCard = ({ item }: { item: SaleItem }) => {
+const SaleCard = ({ item }) => {
   const { value, label, growth, bgColor, iconBackgroundColor, icon, svgIcon: SvgIcon } = item;
 
   const Icon = icon ? (

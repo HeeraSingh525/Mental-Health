@@ -1,12 +1,11 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import { visitorInsightsData } from 'data/visitor-insights-data';
-import LegendToggleButton from 'components/common/LegendToggleButton';
+import { visitorInsightsData } from '../../../../data/visitor-insights-data';
+import LegendToggleButton from '../../../../components/common/LegendToggleButton';
 import VisitorInsightsChart from './VisitorInsightsChart';
 
 const VisitorInsights = () => {
-  const chartRef = useRef<EChartsReactCore | null>(null);
+  const chartRef = useRef(null);
 
   const [legend, setLegend] = useState({
     'loyal Users': false,
@@ -14,7 +13,7 @@ const VisitorInsights = () => {
     'unique Users': false,
   });
 
-  const handleLegendToggle = (name: keyof typeof legend) => {
+  const handleLegendToggle = (name) => {
     setLegend((prevState) => ({
       ...prevState,
       [name]: !prevState[name],

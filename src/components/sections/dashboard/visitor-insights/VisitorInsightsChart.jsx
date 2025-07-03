@@ -1,19 +1,11 @@
 import { useTheme } from '@mui/material';
-import { MutableRefObject, useMemo } from 'react';
+import { useMemo } from 'react';
 import * as echarts from 'echarts/core';
-import {
-  TooltipComponent,
-  TooltipComponentOption,
-  GridComponent,
-  GridComponentOption,
-  LegendComponent,
-  LegendComponentOption,
-} from 'echarts/components';
-import { LineChart, LineSeriesOption } from 'echarts/charts';
+import { TooltipComponent, GridComponent, LegendComponent } from 'echarts/components';
+import { LineChart } from 'echarts/charts';
 import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import ReactEchart from 'components/base/ReactEhart';
+import ReactEchart from '../../../../components/base/ReactEhart';
 
 echarts.use([
   TooltipComponent,
@@ -24,28 +16,11 @@ echarts.use([
   UniversalTransition,
 ]);
 
-type EChartsOption = echarts.ComposeOption<
-  TooltipComponentOption | GridComponentOption | LegendComponentOption | LineSeriesOption
->;
-
-interface VisitorInsightsChartProps {
-  chartRef: MutableRefObject<EChartsReactCore | null>;
-  data: {
-    'loyal customers': number[];
-    'new customers': number[];
-    'unique customers': number[];
-  };
-  style?: {
-    height: number;
-    width?: number;
-  };
-}
-
-const VisitorInsightsChart = ({ chartRef, data, style }: VisitorInsightsChartProps) => {
+const VisitorInsightsChart = ({ chartRef, data, style }) => {
   const theme = useTheme();
 
   const visitorInsightsChartOption = useMemo(() => {
-    const option: EChartsOption = {
+    const option = {
       color: [
         theme.palette.secondary.darker,
         theme.palette.error.darker,

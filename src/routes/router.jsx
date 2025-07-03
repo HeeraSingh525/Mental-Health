@@ -10,10 +10,14 @@ const SignIn = lazy(() => import('../pages/authentication/SignIn'));
 const Page404 = lazy(() => import('../pages/errors/Page404'));
 const Users = lazy(() => import('../pages/Users/Users'));
 const UserDetail = lazy(() => import('../pages/Users/UserDetail'));
+const UserEdit = lazy(() => import('../pages/Users/UserEdit'));
 const Settings = lazy(() => import('../pages/Settings/Settings'));
 const RequireAuth = lazy(() => import('../components/auth/RequireAuth'));
 const ChatLogs = lazy(() => import('../pages/chatLogs/ChatLogs'));
 const Subscriber = lazy(() => import('../pages/subscriber/Subscriber'));
+const CreatePlan = lazy(() => import('../pages/plans/CreatePlan'));
+const PlanList = lazy(() => import('../pages/plans/PlanList'));
+const PlanDetail = lazy(() => import('../pages/plans/PlanDetail'));
 
 import SingleChat from '../pages/chatLogs/SingalChat';
 import PageLoader from '../components/loading/PageLoader';
@@ -54,11 +58,15 @@ export const routes = [
             element: <UserDetail />,
           },
           {
+            path: '/Users/UserEdit/:id',
+            element: <UserEdit />,
+          },
+          {
             path: '/ChatLogs',
             element: <ChatLogs />,
           },
           {
-            path: '/ChatLogs/:id',
+            path: '/SingleChat/:id',
             element: <SingleChat />,
           },
           {
@@ -68,6 +76,18 @@ export const routes = [
           {
             path: '/Subscriber',
             element: <Subscriber />,
+          },
+          {
+            path: '/CreatePlan',
+            element: <CreatePlan />,
+          },
+          {
+            path: '/PlanList',
+            element: <PlanList />,
+          },
+          {
+            path: '/PlanList/:id',
+            element: <PlanDetail />,
           },
         ],
       },

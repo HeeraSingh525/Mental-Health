@@ -1,19 +1,5 @@
-import { Button, Stack, SvgIconProps, Typography } from '@mui/material';
-import IconifyIcon from 'components/base/IconifyIcon';
-
-interface Legend {
-  [key: string]: boolean;
-}
-
-interface LegendToggleButtonProps {
-  name: keyof Legend;
-  icon?: string;
-  svgIcon?: (props: SvgIconProps) => JSX.Element;
-  color: string;
-  value?: string;
-  legend: Legend;
-  onHandleLegendToggle: (name: keyof Legend) => void;
-}
+import { Button, Stack, Typography } from '@mui/material';
+import IconifyIcon from '../../components/base/IconifyIcon';
 
 const LegendToggleButton = ({
   name,
@@ -23,7 +9,7 @@ const LegendToggleButton = ({
   value,
   legend,
   onHandleLegendToggle,
-}: LegendToggleButtonProps) => {
+}) => {
   const Icon = icon ? (
     <IconifyIcon icon={icon} sx={{ color }} />
   ) : SvgIcon ? (

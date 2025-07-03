@@ -1,13 +1,12 @@
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import { useMemo, useRef, useState } from 'react';
-import EChartsReactCore from 'echarts-for-react/lib/core';
-import { volumeVsService } from 'data/volume-vs-service';
-import { getTotal, numberFormat } from 'helpers/utils';
-import LegendToggleButton from 'components/common/LegendToggleButton';
+import { volumeVsService } from '../../../../data/volume-vs-service';
+import { getTotal, numberFormat } from '../../../../helpers/utils';
+import LegendToggleButton from '../../../../components/common/LegendToggleButton';
 import VolumeVsServiceChart from './VolumeVsServiceChart';
 
 const VolumeVsService = () => {
-  const chartRef = useRef<EChartsReactCore | null>(null);
+  const chartRef = useRef(null);
   const [legend, setLegend] = useState({
     volume: false,
     services: false,
@@ -19,7 +18,7 @@ const VolumeVsService = () => {
     [volumeVsService.services],
   );
 
-  const handleLegendToggle = (name: keyof typeof legend) => {
+  const handleLegendToggle = (name) => {
     setLegend((prevState) => ({
       ...prevState,
       [name]: !prevState[name],

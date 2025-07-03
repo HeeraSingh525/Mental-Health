@@ -4,7 +4,6 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  Link,
   Paper,
   Stack,
   TextField,
@@ -109,12 +108,6 @@ const SignIn = () => {
               control={<Checkbox {...checkBoxLabel} color="primary" />}
               label={<Typography variant="subtitle1">Remember me</Typography>}
             />
-
-            <Typography variant="subtitle2" color="primary">
-              <Link href="#!" underline="hover">
-                Forgot password?
-              </Link>
-            </Typography>
           </Stack>
 
           <Button type="submit" size="large" variant="contained" sx={{ mt: 2 }} fullWidth>

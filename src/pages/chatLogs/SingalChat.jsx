@@ -13,7 +13,7 @@ const SingleChat = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get(`http://localhost:5000/api/chat/`, {
+        const response = await axios.get(`http://172.236.30.193:8008/api/chat/`, {
           params: { id },
           headers: {
             Authorization: `Bearer ${token}`,

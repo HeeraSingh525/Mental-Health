@@ -17,6 +17,7 @@ const ChatLogs = lazy(() => import('../pages/chatLogs/ChatLogs'));
 const Subscriber = lazy(() => import('../pages/subscriber/Subscriber'));
 const CreatePlan = lazy(() => import('../pages/plans/CreatePlan'));
 const PlanList = lazy(() => import('../pages/plans/PlanList'));
+const PlanEdit = lazy(() => import('../pages/plans/PlanEdit'));
 const PlanDetail = lazy(() => import('../pages/plans/PlanDetail'));
 
 import SingleChat from '../pages/chatLogs/SingalChat';
@@ -84,6 +85,10 @@ export const routes = [
           {
             path: '/PlanList',
             element: <PlanList />,
+          },
+          {
+            path: '/PlanList/PlanEdit/:id',
+            element: <PlanEdit />,
           },
           {
             path: '/PlanList/:id',

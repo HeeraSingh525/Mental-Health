@@ -25,8 +25,8 @@ const Users = () => {
   const fetchUsers = async (pageNumber = page, limit = pageSize, search = searchQuery) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/user?page=${pageNumber + 1}&limit=${limit}&search=${search}`,
+      const response = await axios.post(
+        `http://172.236.30.193:8008/api/user?page=${pageNumber + 1}&limit=${limit}&search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -36,7 +36,7 @@ const Users = () => {
 
       const formattedUsers = response.data.data.map((user, index) => ({
         id: index + 1 + pageNumber * limit,
-        name: user.name,
+        name: user.name ? user.name : 'N/A',
         mongoId: user._id,
         email: user.email,
         status: user.status,
@@ -96,7 +96,7 @@ const Users = () => {
           // Example: You might want to call an API here like:
           try {
             await axios.post(
-              `http://localhost:5000/api/user/status?id=${params.row.mongoId}`,
+              `http://172.236.30.193:8008/api/user/status?id=${params.row.mongoId}`,
               {},
               {
                 headers: {
@@ -119,7 +119,7 @@ const Users = () => {
           try {
             const token = localStorage.getItem('authToken');
             console.log('params.row._id', params.row.mongoId);
-            await axios.delete(`http://localhost:5000/api/user/${params.row.mongoId}`, {
+            await axios.delete(`http://172.236.30.193:8008/api/user/${params.row.mongoId}`, {
               headers: { Authorization: `Bearer ${token}` },
             });
           } catch (err) {
@@ -177,7 +177,7 @@ const Users = () => {
         />
       </Stack>
 
-      <Box sx={{ height: 420, width: 1, mt: 3 }}>
+      <Box sx={{ height: 420, width: 1, my: 3 }}>
         <DataGrid
           apiRef={apiRef}
           rows={users}
@@ -192,9 +192,8 @@ const Users = () => {
           }}
           rowCount={rowCount}
         />
+        <CustomPagination apiRef={apiRef} />
       </Box>
-
-      <CustomPagination apiRef={apiRef} />
 
       {error && (
         <Typography mt={2} color="error.main">

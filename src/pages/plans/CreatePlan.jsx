@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Paper, Stack, TextField, Typography } from '@mui/material';
+import { Button, Paper, Stack, TextField, Typography, Alert } from '@mui/material';
 import axios from 'axios';
 
 const CreatePlan = () => {
@@ -29,7 +29,7 @@ const CreatePlan = () => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/plan/create', formData);
+      const res = await axios.post('http://172.236.30.193:8008/api/plan/create', formData);
       setSuccess('Plan created successfully!');
       console.log(res);
       setFormData({ title: '', price: '', duration: '', description: '' });
@@ -46,8 +46,11 @@ const CreatePlan = () => {
         Create New Plan
       </Typography>
 
+      {success && <Alert severity="success">{success}</Alert>}
+      {error && <Alert severity="error">{error}</Alert>}
+
       <form onSubmit={handleSubmit}>
-        <Stack spacing={2}>
+        <Stack spacing={2} sx={{ pt: 2 }}>
           <TextField
             label="Title"
             name="title"
@@ -89,17 +92,6 @@ const CreatePlan = () => {
           </Button>
         </Stack>
       </form>
-
-      {success && (
-        <Typography mt={2} color="success.main">
-          {success}
-        </Typography>
-      )}
-      {error && (
-        <Typography mt={2} color="error.main">
-          {error}
-        </Typography>
-      )}
     </Paper>
   );
 };

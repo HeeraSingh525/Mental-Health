@@ -3,56 +3,56 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Paper, Typography, CircularProgress, TextField, Button, Alert } from '@mui/material';
 
-const UserEdit = () => {
+const PlanEdit = () => {
   const { id } = useParams();
-  const [user, setUser] = useState({ name: '', email: '' });
+  const [plan, setPlan] = useState({ title: '', price: '', duration: '', description: '' });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Fetch user on load
+  // Fetch plan on load
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchplan = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get(`http://172.236.30.193:8008/api/user/${id}`, {
+        const response = await axios.get(`http://172.236.30.193:8008/api/plan/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser(response.data);
+        setPlan(response.data.data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to fetch user');
+        setError(err.response?.data?.message || 'Failed to fetch plan');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUser();
+    fetchplan();
   }, [id]);
 
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser((prev) => ({
+    setPlan((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // Handle form submit for edit user
+  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccess('');
     setError('');
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.put(`http://172.236.30.193:8008/api/user/${id}`, user, {
+      const response = await axios.put(`http://172.236.30.193:8008/api/plan/${id}`, plan, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setSuccess('User updated successfully!');
+      setSuccess('Plan updated successfully!');
       console.log('response', response);
     } catch (err) {
       setError(err.response?.data?.message || 'Update failed');
@@ -65,7 +65,7 @@ const UserEdit = () => {
   return (
     <Paper sx={{ p: 3, mx: 'auto', mt: 0, width: '100%', maxWidth: 600 }}>
       <Typography variant="h4" gutterBottom>
-        Edit User
+        Edit plan
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit} mt={2}>
@@ -73,29 +73,46 @@ const UserEdit = () => {
         {success && <Alert severity="success">{success}</Alert>}
 
         <TextField
-          label="Name"
-          name="name"
-          value={user.name}
+          label="Title"
+          name="title"
+          value={plan.title}
           onChange={handleChange}
           fullWidth
           margin="normal"
         />
-
         <TextField
-          label="Email"
-          name="email"
-          value={user.email}
+          label="Price"
+          name="price"
+          type="number"
+          value={plan.price}
           onChange={handleChange}
           fullWidth
           margin="normal"
         />
-
+        <TextField
+          label="Duration (months)"
+          name="duration"
+          value={plan.duration}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Description"
+          name="description"
+          value={plan.description}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          multiline
+          rows={3}
+        />
         <Button variant="contained" type="submit" sx={{ mt: 2 }}>
-          Update User
+          Update plan
         </Button>
       </Box>
     </Paper>
   );
 };
 
-export default UserEdit;
+export default PlanEdit;

@@ -14,7 +14,7 @@ const PlanDetail = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('authToken');
-        const res = await axios.get(`http://localhost:5000/api/plan/${id}`, {
+        const res = await axios.get(`http://172.236.30.193:8008/api/plan/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

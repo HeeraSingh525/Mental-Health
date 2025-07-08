@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Box, CircularProgress, Paper, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Paper,
+  Stack,
+  Typography,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from '@mui/material';
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import axios from 'axios';
-import SearchFilter from '../../components/common/SearchFilter';
-import CustomPagination from '../../components/common/CustomPagination';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,6 +24,8 @@ const PlanList = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deletePlanId, setDeletePlanId] = useState();
   const apiRef = useGridApiRef();
   const navigate = useNavigate();
 
@@ -23,7 +35,7 @@ const PlanList = () => {
       setError('');
       try {
         const token = localStorage.getItem('authToken');
-        const res = await axios.get('http://localhost:5000/api/plan', {
+        const res = await axios.get('http://172.236.30.193:8008/api/plan', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,6 +50,26 @@ const PlanList = () => {
 
     fetchPlans();
   }, []);
+
+  const handleConfirmDelete = () => {
+    setConfirmDelete(true);
+  };
+  const handleDeleteCancel = () => {
+    setConfirmDelete(false);
+  };
+
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      await axios.delete(`http://172.236.30.193:8008/api/plan/${deletePlanId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setPlans((prev) => prev.filter((plan) => plan._id !== deletePlanId));
+      setConfirmDelete(false);
+    } catch (err) {
+      alert('Delete failed!');
+    }
+  };
 
   const columns = [
     { field: 'title', headerName: 'Title', flex: 1 },
@@ -56,21 +88,7 @@ const PlanList = () => {
         };
 
         const handleEdit = () => {
-          navigate(`/PlanList/edit/${params.row._id}`);
-        };
-
-        const handleDelete = async () => {
-          if (window.confirm('Are you sure you want to delete this plan?')) {
-            try {
-              const token = localStorage.getItem('authToken');
-              await axios.delete(`http://localhost:5000/api/plan/${params.row._id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-              });
-              setPlans((prev) => prev.filter((plan) => plan._id !== params.row._id));
-            } catch (err) {
-              alert('Delete failed!');
-            }
-          }
+          navigate(`/PlanList/PlanEdit/${params.row._id}`);
         };
 
         return (
@@ -86,7 +104,12 @@ const PlanList = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="Delete">
-              <IconButton onClick={handleDelete}>
+              <IconButton
+                onClick={() => {
+                  handleConfirmDelete(params.row._id);
+                  setDeletePlanId(params.row._id);
+                }}
+              >
                 <DeleteIcon sx={{ color: '#d32f2f' }} />
               </IconButton>
             </Tooltip>
@@ -97,41 +120,55 @@ const PlanList = () => {
   ];
 
   return (
-    <Paper sx={{ p: 3 }}>
-      <Stack
-        direction={{ md: 'row' }}
-        rowGap={2}
-        justifyContent="space-between"
-        alignItems={{ md: 'center' }}
-        mb={2}
-      >
-        <Typography variant="h5" color="primary.dark">
-          All Plans
-        </Typography>
-        <SearchFilter apiRef={apiRef} sx={{ maxWidth: 350 }} />
-      </Stack>
+    <>
+      <Paper sx={{ p: 3 }}>
+        <Stack
+          direction={{ md: 'row' }}
+          rowGap={2}
+          justifyContent="space-between"
+          alignItems={{ md: 'center' }}
+          mb={2}
+        >
+          <Typography variant="h5" color="primary.dark">
+            All Plans
+          </Typography>
+        </Stack>
 
-      {loading ? (
-        <Box textAlign="center">
-          <CircularProgress />
-        </Box>
-      ) : error ? (
-        <Typography color="error.main">{error}</Typography>
-      ) : (
-        <DataGrid
-          rows={plans.map((plan) => ({ ...plan, id: plan._id }))}
-          columns={columns}
-          // onRowClick={(params) => navigate(`/PlanList/${params.row._id}`)}
-          apiRef={apiRef}
-          pageSizeOptions={[5, 10, 20]}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 5, page: 0 } },
-          }}
-        />
-      )}
+        {loading ? (
+          <Box textAlign="center">
+            <CircularProgress />
+          </Box>
+        ) : error ? (
+          <Typography color="error.main">{error}</Typography>
+        ) : (
+          <DataGrid
+            rows={plans.map((plan) => ({ ...plan, id: plan._id }))}
+            columns={columns}
+            // onRowClick={(params) => navigate(`/PlanList/${params.row._id}`)}
+            apiRef={apiRef}
+            // pageSizeOptions={[15, 10, 20]}
+            initialState={{
+              pagination: { paginationModel: { pageSize: 10, page: 0 } },
+            }}
+          />
+        )}
+      </Paper>
 
-      <CustomPagination apiRef={apiRef} />
-    </Paper>
+      <Dialog open={confirmDelete} onClose={handleDeleteCancel}>
+        <DialogTitle>Delete Plan</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this plan? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDelete} color="error" variant="contained">
+            Confirm Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

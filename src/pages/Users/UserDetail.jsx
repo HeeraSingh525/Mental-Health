@@ -12,13 +12,14 @@ const UserDetail = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log('id', id);
         const token = localStorage.getItem('authToken');
-        const response = await axios.get(`http://localhost:5000/api/user/${id}`, {
+        const response = await axios.post(`http://172.236.30.193:8008/api/user/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setUser(response.data);
+        setUser(response.data.user);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch user');
       } finally {
@@ -38,7 +39,7 @@ const UserDetail = () => {
         User Detail
       </Typography>
       <Box mt={2}>
-        <Typography variant="h6">Name: {user.name}</Typography>
+        <Typography variant="h6">Id: {user._id}</Typography>
         <Typography>Email: {user.email}</Typography>
         <Typography>Status: {user.status}</Typography>
       </Box>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Box, Paper, Typography, CircularProgress } from '@mui/material';
+import { Stack, Paper, Typography, CircularProgress } from '@mui/material';
 
 const UserDetail = () => {
   const { id } = useParams();
@@ -12,7 +12,6 @@ const UserDetail = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log('id', id);
         const token = localStorage.getItem('authToken');
         const response = await axios.post(`http://172.236.30.193:8008/api/user/${id}`, {
           headers: {
@@ -20,6 +19,7 @@ const UserDetail = () => {
           },
         });
         setUser(response.data.user);
+        console.log('User details:', response.data.user);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch user');
       } finally {
@@ -35,14 +35,30 @@ const UserDetail = () => {
 
   return (
     <Paper sx={{ p: 3, mx: 'auto', mt: 0, width: '100%', maxWidth: 600 }}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
         User Detail
       </Typography>
-      <Box mt={2}>
-        <Typography variant="h6">Id: {user._id}</Typography>
-        <Typography>Email: {user.email}</Typography>
-        <Typography>Status: {user.status}</Typography>
-      </Box>
+
+      <Stack spacing={2}>
+        <Typography sx={{ textTransform: 'capitalize' }}>
+          <strong>Name:</strong> {user.name}
+        </Typography>
+        <Typography>
+          <strong>Email:</strong> {user.email}
+        </Typography>
+        <Typography>
+          <strong>Id:</strong> {user._id}
+        </Typography>
+        <Typography>
+          <strong>User Id:</strong> #{user.userId}
+        </Typography>
+        <Typography sx={{ textTransform: 'capitalize' }}>
+          <strong>Status:</strong>{' '}
+          <span style={{ color: user.status === 'active' ? '#00E096' : '#FA5A7D' }}>
+            {user.status}
+          </span>
+        </Typography>
+      </Stack>
     </Paper>
   );
 };

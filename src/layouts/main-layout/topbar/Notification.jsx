@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import IconifyIcon from '../../../components/base/IconifyIcon';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const dummyNotifications = [
   { id: 1, title: 'New message from Ananya', time: '2 mins ago', icon: 'mdi:email-outline' },
@@ -28,6 +29,7 @@ const dummyNotifications = [
 const Notification = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,6 +37,10 @@ const Notification = () => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const openNotifications = () => {
+    navigate(`/Notifications`);
+    handleClose();
   };
 
   return (
@@ -130,7 +136,7 @@ const Notification = () => {
 
         <Divider />
         <Box px={2} py={1.5}>
-          <Button fullWidth size="small" variant="outlined" onClick={handleClose}>
+          <Button fullWidth size="small" variant="outlined" onClick={openNotifications}>
             View All
           </Button>
         </Box>

@@ -60,7 +60,7 @@ const sitemap = [
   },
   {
     id: 7,
-    name: 'subscriptions',
+    name: 'Subscriptions',
     pathName: 'subscription',
     icon: 'mdi-youtube-subscription',
     active: true,
@@ -74,7 +74,7 @@ const sitemap = [
       },
       {
         id: 11,
-        name: 'create Plan',
+        name: 'Create Plan',
         path: '/CreatePlan',
         pathName: 'CreatePlan',
         active: true,
@@ -104,6 +104,14 @@ const sitemap = [
     pathName: 'sign-in',
     icon: 'humbleicons:logout',
     active: true,
+  },
+  {
+    id: 10,
+    name: 'Notifications',
+    path: '/Notifications',
+    pathName: 'Notifications',
+    icon: 'mdi:report-box-multiple-outline',
+    active: false,
   },
 ];
 

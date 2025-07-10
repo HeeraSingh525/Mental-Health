@@ -50,7 +50,7 @@ const PlanDetail = () => {
 
   return (
     <Paper sx={{ p: 3, mx: 'auto', mt: 0, width: '100%', maxWidth: 600 }}>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h4" gutterBottom sx={{ mb: 2 }}>
         Plan Details
       </Typography>
 
@@ -62,7 +62,7 @@ const PlanDetail = () => {
           <strong>Price:</strong> ₹{plan.price}
         </Typography>
         <Typography>
-          <strong>Duration:</strong> {plan.duration} months
+          <strong>Duration:</strong> {`${plan.duration} month${plan.duration > 1 ? 's' : ''}`}
         </Typography>
         <Typography>
           <strong>Description:</strong> {plan.description}

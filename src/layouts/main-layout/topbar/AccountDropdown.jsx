@@ -8,11 +8,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Profile from '../../../assets/Profile.webp';
 import IconifyIcon from '../../../components/base/IconifyIcon';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavFunction } from '../NavFunctionContext';
+import axios from 'axios';
 
 const menuItems = [
   {
@@ -31,6 +32,7 @@ const menuItems = [
 
 const AccountDropdown = () => {
   const [anchorEl, setAnchorEl] = useState();
+  const [profileImg, setProfileImg] = useState(Profile);
   const open = Boolean(anchorEl);
   const { navItemFunction } = useNavFunction();
 
@@ -66,6 +68,23 @@ const AccountDropdown = () => {
         </MenuItem>
       );
     }
+
+    const fetchAmdinProfile = async () => {
+      try {
+        const response = await axios.get('http://172.236.30.193:8008/api/admin', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+          },
+        });
+        setProfileImg(response.data.data[0].profile);
+      } catch (err) {
+        console.error('Error fetching admin profile:', err);
+      }
+    };
+
+    useEffect(() => {
+      fetchAmdinProfile();
+    }, []);
 
     return (
       <MenuItem
@@ -107,7 +126,7 @@ const AccountDropdown = () => {
             mr: { xs: 0, xl: 2.5 },
           }}
           alt="User Profile"
-          src={Profile}
+          src={profileImg ? `http://172.236.30.193:8008/${profileImg}` : Profile}
         />
         <Box sx={{ display: { xs: 'none', xl: 'block' } }}>
           <Stack direction="row" alignItems="center" columnGap={6}>

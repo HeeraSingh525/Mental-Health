@@ -13,9 +13,7 @@ const NavItems = () => {
       }}
     >
       {sitemap.map((navItem) => (
-        <>
-          <NavItem key={navItem.id} item={navItem} />
-        </>
+        <NavItem key={navItem.id} item={navItem} />
       ))}
     </List>
   );

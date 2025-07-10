@@ -23,13 +23,21 @@ const Subscriber = () => {
       flex: 1,
       minWidth: 230,
     },
-    { field: 'duration', headerName: 'Duration', flex: 1.5, minWidth: 200 },
     {
       field: 'price',
       headerName: 'Price',
       flex: 1,
       minWidth: 70,
+      renderCell: (params) => `₹ ${params.value}`,
     },
+    {
+      field: 'duration',
+      headerName: 'Duration',
+      flex: 1.5,
+      minWidth: 200,
+      renderCell: (params) => `${params.value} month${params.value > 1 ? 's' : ''}`,
+    },
+
     { field: 'description', headerName: 'Description', flex: 1.5, minWidth: 200 },
   ];
 
@@ -47,7 +55,6 @@ const Subscriber = () => {
       );
       setSubscribers(response.data.data);
       setRowCount(response.data.total);
-      console.log(subscribers);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch users');
     } finally {

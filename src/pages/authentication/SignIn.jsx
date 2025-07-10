@@ -8,17 +8,41 @@ import {
   Stack,
   TextField,
   Typography,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LogoHeader from '../../layouts/main-layout/sidebar/LogoHeader';
 import PasswordTextField from '../../components/common/PasswordTextField';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useState } from 'react';
 
 const checkBoxLabel = { inputProps: { 'aria-label': 'Checkbox' } };
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success', // or 'error'
+    vertical: 'top',
+    horizontal: 'right',
+  });
+
+  const handleClickAlert = ({ vertical = 'top', horizontal = 'right', message, severity }) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+      vertical,
+      horizontal,
+    });
+  };
+
+  const handleCloseAlert = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   const {
     register,
@@ -34,21 +58,45 @@ const SignIn = () => {
       });
 
       const { token } = response.data.data;
-      console.log('Login successful, token:', response.data);
+      // console.log('Login successful', response.data);
       if (token) {
         localStorage.setItem('authToken', token);
         navigate('/');
       } else {
-        alert('Login failed: No token received');
+        handleClickAlert({
+          message: 'Oops! That email or password doesn’t seem right. Please try again.',
+          severity: 'error',
+        });
       }
     } catch (error) {
-      console.error('Login error:', error);
-      alert(error.response?.data?.message || 'Invalid email or password');
+      handleClickAlert({
+        message:
+          error.response?.data?.message ||
+          'Oops! That email or password doesn’t seem right. Please try again.',
+        severity: 'error',
+      });
     }
   };
 
   return (
     <Container maxWidth="sm" sx={{ py: 10 }}>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        key={snackbar.vertical + snackbar.horizontal}
+        anchorOrigin={{ vertical: snackbar.vertical, horizontal: snackbar.horizontal }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+
       <LogoHeader sx={{ justifyContent: 'center', mb: 5 }} />
 
       <Paper sx={{ p: 5 }}>

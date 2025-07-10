@@ -21,6 +21,7 @@ const SearchFilter = ({ apiRef, ...props }) => {
       type="search"
       variant="filled"
       placeholder="Search..."
+      focused
       onChange={handleFilter}
       {...props}
     />

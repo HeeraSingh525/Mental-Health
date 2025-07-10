@@ -1,8 +1,5 @@
-// src/pages/Settings.jsx
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Container,
   Typography,
   TextField,
   Grid,
@@ -15,38 +12,129 @@ import {
   IconButton,
   InputAdornment,
   Box,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { Visibility, VisibilityOff, PhotoCamera } from '@mui/icons-material';
+import axios from 'axios';
 
 const Settings = () => {
   const [emailNotif, setEmailNotif] = useState(true);
   const [smsNotif, setSmsNotif] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [adminName, setAdminName] = useState();
+  const [adminPassword, setAdminPassword] = useState();
+  const [adminPasswordConfirm, setAdminPasswordConfirm] = useState();
+  const [adminData, setAdminData] = useState();
   const [profilePic, setProfilePic] = useState('/avatar.png');
+  const token = localStorage.getItem('authToken');
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+    vertical: 'top',
+    horizontal: 'right',
+  });
+
+  const fetchAdminData = async () => {
+    try {
+      const response = await axios.get('http://172.236.30.193:8008/api/admin', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAdminData(response.data.data[0]);
+      setAdminName(response.data.data[0].name);
+      setProfilePic(response.data.data[0].profile);
+      console.log('fetchAdminData', adminData);
+    } catch (err) {
+      console.error('Error saving settings:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminData();
+  }, []);
 
   const handleProfilePicChange = (event) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePic(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setProfilePic(file);
     }
   };
 
-  const handleSave = () => {
-    console.log('Settings saved.');
+  const handleSave = async () => {
+    if (adminPassword || adminPasswordConfirm) {
+      if (!adminPassword || !adminPasswordConfirm) {
+        handleClickAlert({
+          message: 'Please confirm your new password.',
+          severity: 'error',
+        });
+        return;
+      }
+      if (adminPassword !== adminPasswordConfirm) {
+        handleClickAlert({
+          message: 'Passwords do not match!',
+          severity: 'error',
+        });
+        return;
+      }
+    }
+    try {
+      const formData = new FormData();
+      formData.append('name', adminName);
+      if (profilePic) {
+        formData.append('profile', profilePic);
+      }
+      if (adminPassword) {
+        formData.append('password', adminPassword);
+      }
+      const response = await axios.post('http://172.236.30.193:8008/api/admin/update', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200 || response.status === 201) {
+        handleClickAlert({
+          message: response.data?.message || 'User updated successfully!',
+          severity: 'success',
+        });
+      } else {
+        handleClickAlert({
+          message: 'Something went wrong. Please try again.',
+          severity: 'error',
+        });
+      }
+    } catch (err) {
+      handleClickAlert({
+        message: err.response?.data?.message || 'Failed to update Admin. Please try again.',
+        severity: 'error',
+      });
+    }
+  };
+
+  const handleClickAlert = ({ vertical = 'top', horizontal = 'right', message, severity }) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+      vertical,
+      horizontal,
+    });
+  };
+
+  const handleCloseAlert = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Admin Profile Settings
-      </Typography>
-
-      <Paper elevation={3} sx={{ p: 3 }}>
+    <>
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
+          Admin Profile Settings
+        </Typography>
         {/* Profile Section */}
         <Typography variant="h6" gutterBottom>
           Profile Information
@@ -54,7 +142,18 @@ const Settings = () => {
         <Grid container spacing={2} alignItems="center" sx={{ mb: 3 }}>
           <Grid item xs={12} sm={2}>
             <Box position="relative" display="inline-block">
-              <Avatar src={profilePic} alt="Heera Singh" sx={{ width: 56, height: 56 }} />
+              <Avatar
+                src={
+                  profilePic
+                    ? profilePic instanceof File
+                      ? URL.createObjectURL(profilePic)
+                      : `http://172.236.30.193:8008/${profilePic}`
+                    : ''
+                }
+                alt="Admin-profile"
+                sx={{ width: 80, height: 80 }}
+              />
+
               <IconButton
                 color="primary"
                 component="label"
@@ -66,10 +165,17 @@ const Settings = () => {
             </Box>
           </Grid>
           <Grid item xs={12} sm={5}>
-            <TextField fullWidth label="Full Name" defaultValue="Aarav Mehta" />
+            <TextField
+              fullWidth
+              label="Full Name"
+              value={adminName || ''}
+              onChange={(event) => {
+                setAdminName(event.target.value);
+              }}
+            />
           </Grid>
           <Grid item xs={12} sm={5}>
-            <TextField fullWidth label="Email" defaultValue="aarav@example.com" />
+            <TextField fullWidth label="Email" value={adminData?.email || ''} disabled />
           </Grid>
         </Grid>
 
@@ -85,6 +191,9 @@ const Settings = () => {
               fullWidth
               label="New Password"
               type={showPassword ? 'text' : 'password'}
+              onChange={(event) => {
+                setAdminPassword(event.target.value);
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -101,6 +210,9 @@ const Settings = () => {
               fullWidth
               label="Confirm Password"
               type={showConfirmPassword ? 'text' : 'password'}
+              onChange={(event) => {
+                setAdminPasswordConfirm(event.target.value);
+              }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -134,11 +246,29 @@ const Settings = () => {
         <Divider sx={{ my: 3 }} />
 
         {/* Save Button */}
-        <Button variant="contained" color="primary" onClick={handleSave}>
+        <Button variant="contained" color="primary" onClick={handleSave} sx={{ fontWeight: 400 }}>
           Save Changes
         </Button>
       </Paper>
-    </Container>
+
+      {/* Alert toast Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        key={snackbar.vertical + snackbar.horizontal}
+        anchorOrigin={{ vertical: snackbar.vertical, horizontal: snackbar.horizontal }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

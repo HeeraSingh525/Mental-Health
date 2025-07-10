@@ -19,6 +19,7 @@ const CreatePlan = lazy(() => import('../pages/plans/CreatePlan'));
 const PlanList = lazy(() => import('../pages/plans/PlanList'));
 const PlanEdit = lazy(() => import('../pages/plans/PlanEdit'));
 const PlanDetail = lazy(() => import('../pages/plans/PlanDetail'));
+const Notifications = lazy(() => import('../pages/notifications/Notifications'));
 
 import SingleChat from '../pages/chatLogs/SingalChat';
 import PageLoader from '../components/loading/PageLoader';
@@ -93,6 +94,10 @@ export const routes = [
           {
             path: '/PlanList/:id',
             element: <PlanDetail />,
+          },
+          {
+            path: '/Notifications',
+            element: <Notifications />,
           },
         ],
       },

@@ -116,7 +116,7 @@ const ChatLogs = () => {
           }}
         >
           <img
-            src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png" // You can replace this with your own image
+            src="https://cdn-icons-png.flaticon.com/512/6134/6134065.png"
             alt="No Chats"
             width={120}
             style={{ opacity: 0.6, marginBottom: 16 }}
@@ -129,7 +129,7 @@ const ChatLogs = () => {
         <Box sx={{ display: 'flex', height: '60vh' }}>
           {/* Left Side: Chat List */}
 
-          <Paper sx={{ width: '35%', p: 2 }}>
+          <Paper sx={{ width: '35%', p: 2 }} className="chat-list-page">
             <Typography variant="h5" color="primary.dark" mb={3}>
               Chats
             </Typography>
@@ -143,6 +143,7 @@ const ChatLogs = () => {
             />
             <Box
               sx={{
+                mb: 2,
                 '& .MuiDataGrid-columnHeaders': {
                   display: 'none',
                 },

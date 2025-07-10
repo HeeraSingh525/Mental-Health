@@ -11,6 +11,8 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { DataGrid, useGridApiRef } from '@mui/x-data-grid';
 import axios from 'axios';
@@ -28,6 +30,14 @@ const PlanList = () => {
   const [deletePlanId, setDeletePlanId] = useState();
   const apiRef = useGridApiRef();
   const navigate = useNavigate();
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+    vertical: 'top',
+    horizontal: 'right',
+  });
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -51,6 +61,20 @@ const PlanList = () => {
     fetchPlans();
   }, []);
 
+  const handleClickAlert = ({ vertical = 'top', horizontal = 'right', message, severity }) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+      vertical,
+      horizontal,
+    });
+  };
+
+  const handleCloseAlert = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
+
   const handleConfirmDelete = () => {
     setConfirmDelete(true);
   };
@@ -66,16 +90,33 @@ const PlanList = () => {
       });
       setPlans((prev) => prev.filter((plan) => plan._id !== deletePlanId));
       setConfirmDelete(false);
+      handleClickAlert({
+        message: 'Plan deleted successfully.',
+        severity: 'success',
+      });
     } catch (err) {
-      alert('Delete failed!');
+      handleClickAlert({
+        message: err.response?.data?.message || 'Delete failed!',
+        severity: 'error',
+      });
     }
   };
 
   const columns = [
-    { field: 'title', headerName: 'Title', flex: 1 },
-    { field: 'price', headerName: 'Price', flex: 1 },
-    { field: 'duration', headerName: 'Duration', flex: 1 },
-    { field: 'description', headerName: 'Description', flex: 2 },
+    { field: 'title', headerName: 'Title', flex: 2 },
+    {
+      field: 'price',
+      headerName: 'Price',
+      flex: 1,
+      renderCell: (params) => `₹ ${params.value}`,
+    },
+    {
+      field: 'duration',
+      headerName: 'Duration',
+      flex: 1,
+      renderCell: (params) => `${params.value} month${params.value > 1 ? 's' : ''}`,
+    },
+    { field: 'description', headerName: 'Description', flex: 3 },
     {
       field: 'action',
       headerName: 'Actions',
@@ -132,6 +173,15 @@ const PlanList = () => {
           <Typography variant="h5" color="primary.dark">
             All Plans
           </Typography>
+          <Button
+            sx={{ fontWeight: 400 }}
+            variant="contained"
+            onClick={() => {
+              navigate('/CreatePlan');
+            }}
+          >
+            Create Plan
+          </Button>
         </Stack>
 
         {loading ? (
@@ -168,6 +218,24 @@ const PlanList = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Alert toast Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        key={snackbar.vertical + snackbar.horizontal}
+        anchorOrigin={{ vertical: snackbar.vertical, horizontal: snackbar.horizontal }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

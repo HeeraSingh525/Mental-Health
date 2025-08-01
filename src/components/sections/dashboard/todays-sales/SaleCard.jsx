@@ -2,7 +2,7 @@ import { Card, CardContent, Stack, Typography } from '@mui/material';
 import IconifyIcon from '../../../../components/base/IconifyIcon';
 
 const SaleCard = ({ item }) => {
-  const { value, label, growth, bgColor, iconBackgroundColor, icon, svgIcon: SvgIcon } = item;
+  const { value, label, bgColor, iconBackgroundColor, icon, svgIcon: SvgIcon } = item;
 
   const Icon = icon ? (
     <IconifyIcon icon={icon} sx={{ fontSize: 20, color: 'common.white' }} />
@@ -15,6 +15,7 @@ const SaleCard = ({ item }) => {
       sx={{
         borderRadius: 4,
         bgcolor: bgColor,
+        height: '100%',
       }}
     >
       <CardContent sx={(theme) => ({ p: { xs: `${theme.spacing(2.5)} !important` } })}>
@@ -37,9 +38,6 @@ const SaleCard = ({ item }) => {
         </Typography>
         <Typography variant="h6" color="grey.800" component="p" mb={1}>
           {label}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" component="p">
-          Last day {growth}
         </Typography>
       </CardContent>
     </Card>

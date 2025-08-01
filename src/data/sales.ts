@@ -1,11 +1,11 @@
+// src/data/sales.ts
+
 import { SvgIconProps } from '@mui/material';
-import OrderIcon from 'components/icons/OrderIcon';
-// import SalesIcon from 'components/icons/SalesIcon';
 
 export interface SaleItem {
   label: string;
+  key: string; // ✅ unique key for matching
   value: string;
-  growth: string;
   bgColor: string;
   iconBackgroundColor: string;
   icon?: string;
@@ -14,33 +14,33 @@ export interface SaleItem {
 
 export const sales: SaleItem[] = [
   {
-    label: 'Flagged Conversations',
-    value: '150',
-    growth: '+8%',
+    key: 'TotalUsers',
+    label: 'Active User Base',
+    value: '0',
     bgColor: 'error.lighter',
     iconBackgroundColor: 'error.main',
     icon: 'mdi:account-convert',
   },
   {
-    label: 'Continuing Conversations',
-    value: '300+',
-    growth: '+5%',
+    key: 'ActiveConversations',
+    label: 'Active Conversations',
+    value: '0',
     bgColor: 'warning.lighter',
     iconBackgroundColor: 'error.dark',
-    svgIcon: OrderIcon,
+    icon: 'mdi:account-convert',
   },
   {
+    key: 'accuracy',
     label: 'Bot Response Accuracy',
-    value: '96%',
-    growth: '+1.2%',
+    value: '0',
     bgColor: 'success.lighter',
     iconBackgroundColor: 'success.darker',
     icon: 'mdi:responsive',
   },
   {
+    key: 'mood',
     label: 'Mood Change Trend',
-    value: '8',
-    growth: '+0.5%',
+    value: '0',
     bgColor: 'secondary.lighter',
     iconBackgroundColor: 'secondary.main',
     icon: 'mdi:mood',
